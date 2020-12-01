@@ -14,6 +14,26 @@ knitr::opts_chunk$set(
 )
 ```
 
+# Introduction
+This package implements some simple univariate and bivariate bootstrap routines. This tutorial illustrates how to install and use the functions in this package. 
+
+# Installation
+
 ```{r setup}
+#devtools::install_github("soumikp/bootstrap",build_vignettes=TRUE) # Not run while building this tutorial.
 library(bootstrap)
+```
+
+# Functions
+
+The package contains forteen functions, one corresponding to each of the methods. To view the source R codes you can use the following approach. For example, to examine the bootstrap function for single sample mean, type 
+
+```{r, eval=F, echo=T}
+bootstrap::oneMean
+```
+
+The help pages contain the references which provide further details. For example, to examine the bootstrap function for single sample median, type 
+
+```{r, eval=F, echo=T}
+?oneMedian
 ```
