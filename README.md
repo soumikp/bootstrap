@@ -2,6 +2,7 @@
 
 <!-- badges: start -->
 [![Travis build status](https://travis-ci.com/soumikp/bootstrap.svg?branch=master)](https://travis-ci.com/soumikp/bootstrap)
+[![Codecov test coverage](https://codecov.io/gh/soumikp/bootstrap/branch/master/graph/badge.svg)](https://codecov.io/gh/soumikp/bootstrap?branch=master)
 <!-- badges: end -->
 
 This package aims to implement simple bootstrap routines to study the behaviour of 
