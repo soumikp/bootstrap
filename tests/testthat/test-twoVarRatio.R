@@ -7,4 +7,3 @@ test_that("twoVarRatio works", {
   }, TRUE)
 })
 
-
