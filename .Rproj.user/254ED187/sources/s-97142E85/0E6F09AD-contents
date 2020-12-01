@@ -7,13 +7,5 @@ test_that("twoCor works", {
   }, TRUE)
 })
 
-test_that("twoCor unequal works", {
-  expect_equal({
-    set.seed(1234)
-    x <- rnorm(100, 5, 4)
-    y <- rnorm(50)
-    twoCor(x, y, 1000)
-  }, "x and y must have same length!")
-})
 
 
