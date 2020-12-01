@@ -1,7 +1,7 @@
 # bootstrap
 
 <!-- badges: start -->
-[![Travis build status](https://travis-ci.com/soumikp/bootstrap.svg?branch=master)](https://travis-ci.com/soumikp/bootstrap)
+[![Build Status](https://travis-ci.com/soumikp/bootstrap.svg?branch=main)](https://travis-ci.com/soumikp/bootstrap)
 [![Codecov test coverage](https://codecov.io/gh/soumikp/bootstrap/branch/master/graph/badge.svg)](https://codecov.io/gh/soumikp/bootstrap?branch=master)
 <!-- badges: end -->
 
