@@ -1,0 +1,8 @@
+test_that("oneMean works", {
+  expect_equal({set.seed(1234)
+    mean(oneMean(rnorm(100), 1000))},
+    -0.1622995
+    )
+})
+
+

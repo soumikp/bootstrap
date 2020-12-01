@@ -1,0 +1,24 @@
+{
+    "id": "99258BD6",
+    "path": "~/wtf/bootstrap/vignettes/bootstrap_vignette.Rmd",
+    "project_path": "vignettes/bootstrap_vignette.Rmd",
+    "type": "r_markdown",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1606851780886.0,
+    "source_on_save": false,
+    "relative_order": 4,
+    "properties": {
+        "cursorPosition": "34,147",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1606852622,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1606852622888,
+    "read_only": false,
+    "read_only_alternatives": []
+}
