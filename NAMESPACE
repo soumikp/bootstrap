@@ -1,0 +1,2 @@
+exportPattern("^[[:alpha:]]+")
+importFrom("stats", "median", "quantile", "sd", "var", "cor", "lm", "coefficients", "complete.cases")
