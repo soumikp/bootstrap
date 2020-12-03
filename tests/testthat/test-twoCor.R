@@ -6,6 +6,3 @@ test_that("twoCor works", {
     abs(mean(twoCor(x, y, 1000))  - 0.8860812) < 0.01
   }, TRUE)
 })
-
-
-
