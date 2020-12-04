@@ -17,10 +17,11 @@
 #' @importFrom base sample, replicate
 #' @export
 oneCentralMoment <- function(x, order = 2, B = 1000){
-  y <- (x - mean(x))^order
+  y <- (x - mean(x))^order #centered and raised to order of moment
   l <- length(x)
   replicate(B,
             mean(y[sample(1:l,
                           l,
-                          replace = TRUE)]))
+                          replace = TRUE) #resampling observations
+                   ]))
 }
