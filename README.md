@@ -9,8 +9,11 @@ This package aims to implement some simple bootstrap routines.
 
 1. For a single sample:
   a. `oneMean` and `oneRawMoment`  for bootstrapping mean and raw moments respectively.
+  
   b. `oneSD`, `oneVar` and `oneCentralMoment` for bootstrapping SD, variance and central moments respectively.
+  
   c. `oneMedian` and `oneQuantile` for bootstrapping median and $p-$th quantile ($0 < p < 1$) respectively.
+  
   d. `oneCV` and `oneIQR` for bootstrapping coefficient of variation and interquartile range respectively.
   
 2. For two samples (not necessarily of equal length):
