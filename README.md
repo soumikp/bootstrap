@@ -7,16 +7,21 @@
 
 This package aims to implement some simple bootstrap routines. 
 
-1. For a single sample $x$:
-    a. `oneMean` and `oneRawMoment`  for bootstrapping mean and raw moments respectively.
-    b. `oneSD`, `oneVar` and `oneCentralMoment` for bootstrapping SD, variance and central moments respectively.
-    c. `oneMedian` and `oneQuantile` for bootstrapping median and $p-$th quantile ($0 < p < 1$) respectively.
-    d. `oneCV` and `oneIQR` for bootstrapping coefficient of variation and interquartile range respectively.
-2. For two samples $x$ and $y$ (not necessarily of equal length):
-    a. `twoMeanDiff` for bootstrapping difference of means .
-    b. `twoQuantileDiff` for bootstrapping difference of $p-$th quantile ($0 < p < 1$).
-    c. `twoVarRatio` for bootstrapping ratio of variances.
+1. For a single sample:
+  
+  a. `oneMean` and `oneRawMoment`  for bootstrapping mean and raw moments respectively.
+  b. `oneSD`, `oneVar` and `oneCentralMoment` for bootstrapping SD, variance and central moments respectively.
+  c. `oneMedian` and `oneQuantile` for bootstrapping median and $p-$th quantile ($0 < p < 1$) respectively.
+  d. `oneCV` and `oneIQR` for bootstrapping coefficient of variation and interquartile range respectively.
+  
+2. For two samples (not necessarily of equal length):
+
+  a. `twoMeanDiff` for bootstrapping difference of means .
+  b. `twoQuantileDiff` for bootstrapping difference of $p-$th quantile ($0 < p < 1$).
+  c. `twoVarRatio` for bootstrapping ratio of variances.
+  
 3. `twoCor` for bootstrapping Pearson's correlation of paired data.
+
 4. `lmBoot` for bootstrapping regression coefficients. 
 
 For more details on the methods and references, you can visit the individual help pages for the functions by using the `?` operator
