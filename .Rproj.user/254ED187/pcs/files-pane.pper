@@ -5,5 +5,5 @@
             "ascending": true
         }
     ],
-    "path": "~/wtf/bootstrap"
+    "path": "~/wtf/bootstrap/tests/testthat"
 }

@@ -2,6 +2,7 @@
 /Users/soumikp/wtf/bootstrap/DESCRIPTION="11BDA060"
 /Users/soumikp/wtf/bootstrap/R/oneMean.R="5EE9D1BA"
 /Users/soumikp/wtf/bootstrap/R/twoCor.R="275D4C8A"
+/Users/soumikp/wtf/bootstrap/tests/testthat.R="0FD5CE97"
 /Users/soumikp/wtf/bootstrap/tests/testthat/test-lmBoot.R="EFD385B2"
 /Users/soumikp/wtf/bootstrap/tests/testthat/test-oneCV.R="6804C08D"
 /Users/soumikp/wtf/bootstrap/tests/testthat/test-oneCentralMoment.R="6DF77D20"

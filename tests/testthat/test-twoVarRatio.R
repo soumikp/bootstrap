@@ -1,9 +1,12 @@
 test_that("twoVarRatio works", {
+  ## because this is a bootstrap procedure (instead of exact equality) will check
+  ## if mean of bootstrapped statistic is close to the 'true' value
   expect_equal({
-    set.seed(1234)
+    set.seed(1234) #for reproducibility
     x <- rnorm(100, 5, 1)
     y <- rnorm(150, 2, 3)
-    abs(mean(twoVarRatio(x, y,  1000))  - 0.1111462) < 0.001
+    true <- 1/9 #true parameter value
+    abs(mean(twoVarRatio(x, y,  1000))/true - 1) < 0.1 #10% relative error bound
   }, TRUE)
 })
 
