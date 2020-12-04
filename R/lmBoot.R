@@ -27,30 +27,30 @@
 #' @importFrom stats coefficients, lm, complete.cases
 #' @export
 lmBoot<- function(model, B = 1000, res = FALSE){
-  data <- data.frame(y = model$model[,1],
-                     X = model$model[,-1])
-  data <- data[complete.cases(data),]
+  data <- data.frame(y = model$model[,1], #extract response
+                     X = model$model[,-1] #extract regressors
+                     )
+  data <- data[complete.cases(data),] #kick out missing values
   l <- nrow(data)
-  if(res == FALSE){
+  if(res == FALSE){#bootstrapping rows
     t(replicate(B,
                 as.numeric(coefficients(lm(y~.,
                                            data = data[sample(1:l,
                                                               l,
-                                                              replace = TRUE),])
-                ))))
+                                                              replace = TRUE),] #resampled rows of model frame
+                                           )
+                )))) #returns matrix of coefficients. Each row is a bootstrapped estimate of coefficients
   }else{
-    fit <- model$fitted.values
-    res <- model$residuals
+    fit <- model$fitted.values #fitted values in original model
+    res <- model$residuals #residuals to be bootstrapped from
     l <- length(res)
     t(replicate(B,
                 {
                   data$y <- fit + res[sample(1:l,
                                              l,
-                                             replace = TRUE)]
+                                             replace = TRUE)] #recreate resampled response value = original fit + resampled residuals
                   as.numeric(coefficients(lm(y~.,
                                              data = data)))
-                }
-    )
-    )
+                })) #returns matrix of coefficients. Each row is a bootstrapped estimate of coefficients
   }
 }
