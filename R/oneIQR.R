@@ -20,7 +20,10 @@ oneIQR <- function(x, B = 1000){
   replicate(B,
             as.numeric(diff(quantile(x[sample(1:l,
                                               l,
-                                              replace = TRUE)],
-                                     probs = c(0.25, 0.75)
-            ))))
+                                              replace = TRUE) #resampled observations
+                                       ],
+                                     probs = c(0.25, 0.75) #25th and 75th quantiles computed
+            )
+            ) #IQR = difference of 75th and 25th quantiles
+            ))
             }
