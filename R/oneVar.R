@@ -21,5 +21,6 @@ oneVar <- function(x, B = 1000){
   replicate(B,
             mean(y[sample(1:l,
                           l,
-                          replace = TRUE)]))
+                          replace = TRUE)#resampled observations
+                   ]))
 }

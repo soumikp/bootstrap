@@ -21,10 +21,12 @@ l.y <- length(y)
 replicate(B,
           (mean(x[sample(1:l.x,
                          l.x,
-                         replace = TRUE)]) -
+                         replace = TRUE)#resampled observations
+                  ]) -
              mean(y[sample(1:l.y,
                            l.y,
-                           replace = TRUE)])
+                           replace = TRUE)#resampled observations
+                    ])
           )
 )
 }

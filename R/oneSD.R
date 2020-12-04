@@ -21,5 +21,6 @@ oneSD <- function(x, B = 1000){
   replicate(B,
             sqrt(mean(y[sample(1:l,
                           l,
-                          replace = TRUE)])))
+                          replace = TRUE)#resampled observations
+                        ])))
 }

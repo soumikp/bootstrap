@@ -21,5 +21,6 @@ oneQuantile <- function(x, prob = 0.5, B = 1000){
   replicate(B,
             as.numeric(quantile(x[sample(1:l,
                                      l,
-                                     replace = TRUE)], prob)))
+                                     replace = TRUE) #resampled observations
+                                  ], prob)))
 }

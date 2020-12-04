@@ -25,11 +25,13 @@ twoQuantileDiff <- function(x, y, prob = 0.5, B = 1000){
   replicate(B,
             (as.numeric(quantile(x[sample(1:l.x,
                                           l.x,
-                                          replace = TRUE)],
+                                          replace = TRUE)#resampled observations
+                                   ],
                                  prob = prob)) -
                as.numeric(quantile(y[sample(1:l.y,
                                             l.y,
-                                            replace = TRUE)],
+                                            replace = TRUE)#resampled observations
+                                     ],
                                    prob = prob))
             )
   )

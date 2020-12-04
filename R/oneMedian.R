@@ -20,5 +20,6 @@ oneMedian <- function(x, B = 1000){
   replicate(B,
             median(x[sample(1:l,
                             l,
-                            replace = TRUE)]))
+                            replace = TRUE) #resampled observations
+                     ]))
 }

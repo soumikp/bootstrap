@@ -21,11 +21,9 @@ twoVarRatio <- function(x, y, B = 1000){
   l.x <- length(x)
   l.y <- length(y)
   replicate(B,
-            (var(x[sample(1:l.x,
-                          l.x,
-                          replace = TRUE)])/var(y[sample(1:l.y,
-                                                         l.y,
-                                                         replace = TRUE)])
+            (var(x[sample(1:l.x,l.x,replace = TRUE)#resampled observations
+                   ])/var(y[sample(1:l.y,l.y,replace = TRUE)#resampled observations
+                            ])
             )
   )
 }

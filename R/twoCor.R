@@ -25,7 +25,8 @@ twoCor <- function(x, y, B = 1000){
             {
               pos <- sample(1:l,
                             l,
-                            replace = TRUE)
-              return(cor(x[pos], y[pos]))
+                            replace = TRUE) #resampled observations
+              return(cor(x[pos], y[pos]) #must ensure resampling is done pair-wise
+                     )
             })
 }
