@@ -3,7 +3,6 @@
 <!-- badges: start -->
 [![Build Status](https://travis-ci.com/soumikp/bootstrap.svg?branch=main)](https://travis-ci.com/soumikp/bootstrap)
 [![Coveralls test coverage](https://coveralls.io/repos/github/soumikp/bootstrap/badge.svg)](https://coveralls.io/r/soumikp/bootstrap?branch=master)
-[![Travis build status](https://travis-ci.com/soumikp/bootstrap.svg?branch=master)](https://travis-ci.com/soumikp/bootstrap)
 <!-- badges: end -->
 
 This package aims to implement some simple bootstrap routines. 
