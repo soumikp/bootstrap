@@ -20,7 +20,8 @@ oneCV <- function(x, B){
   replicate(B,{
     y <- x[sample(1:l,
                   l,
-                  replace = TRUE)]
-    sd(y)/mean(y)
+                  replace = TRUE)#resampled observations
+           ]
+    sd(y)/mean(y) #coefficient of variation computed
   })
 }
