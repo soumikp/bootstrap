@@ -19,7 +19,7 @@ This package implements some simple univariate and bivariate bootstrap routines.
 
 # Installation
 
-```{r setup, eval = TRUE, }
+```{r setup, eval = FALSE}
 ## For installation and creation of vignette, run the code 
 devtools::install_github("soumikp/bootstrap",build_vignettes=TRUE) 
 ## Not run while building this tutorial.
