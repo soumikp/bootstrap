@@ -44,8 +44,7 @@ The help pages contain the references which provide further details. For example
 First, load the package 
 
 ```{R load}
-install.packages("devtools")
-devtools::install_github("rdpeng/simpleboot")
+install.packages("simpleboot")
 library(bootstrap)
 library(simpleboot)
 ```
