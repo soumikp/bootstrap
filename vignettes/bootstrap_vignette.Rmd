@@ -19,7 +19,7 @@ This package implements some simple univariate and bivariate bootstrap routines.
 
 # Installation
 
-```{r setup, eval = FALSE}
+```{r setup, eval = TRUE, }
 ## For installation and creation of vignette, run the code 
 devtools::install_github("soumikp/bootstrap",build_vignettes=TRUE) 
 ## Not run while building this tutorial.
@@ -44,7 +44,9 @@ The help pages contain the references which provide further details. For example
 First, load the package 
 
 ```{R load}
+devtools::install_github("rdpeng/simpleboot")
 library(bootstrap)
+library(simpleboot)
 ```
 
 ## Single sample bootstrap routines
