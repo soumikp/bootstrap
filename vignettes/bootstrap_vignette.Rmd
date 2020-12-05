@@ -15,18 +15,19 @@ knitr::opts_chunk$set(
 ```
 
 # Introduction
-This package implements some simple univariate and bivariate bootstrap routines. This tutorial illustrates how to install and use the functions in this package. 
+This package implements some simple univariate and bivariate bootstrap routines. This tutorial illustrates how to install and use the functions in this package. Additionally, we will compare the results and performance of the functions detailed below with those presented in the [simpleboot](https://cran.r-project.org/web/packages/simpleboot/simpleboot.pdf) package in R. 
 
 # Installation
 
-```{r setup}
-#devtools::install_github("soumikp/bootstrap",build_vignettes=TRUE) # Not run while building this tutorial.
-library(bootstrap)
+```{r setup, eval = FALSE}
+## For installation and creation of vignette, run the code 
+devtools::install_github("soumikp/bootstrap",build_vignettes=TRUE) 
+## Not run while building this tutorial.
 ```
 
 # Functions
 
-The package contains forteen functions, one corresponding to each of the methods. To view the source R codes you can use the following approach. For example, to examine the bootstrap function for single sample mean, type 
+The package contains fourteen functions, one corresponding to each of the methods. To view the source R codes you can use the following approach. For example, to examine the bootstrap function for single sample mean, type 
 
 ```{r, eval=F, echo=T}
 bootstrap::oneMean
@@ -37,3 +38,647 @@ The help pages contain the references which provide further details. For example
 ```{r, eval=F, echo=T}
 ?oneMedian
 ```
+
+# Tutorial
+
+First, load the package 
+
+```{R load}
+library(bootstrap)
+```
+
+## Single sample bootstrap routines
+
+We will generate a random sample from $N(5, 2)$ of size 100, obtain 1000 bootstrapped statistics from the same and study their behaviour. 
+
+```{R single}
+set.seed(1234)
+data <- rnorm(100, 5, 2)
+```
+
+Given the randomness of resampling procedures, instead of checking for exact equality, we will examine if the bootstrapped mean is close to the true parameter value. Further, we will examine if the output from `simpleboot` is close to the true parameter value as well. By 'close', we imply that the mean of the bootstrapped statistic is within a $10\%$ absolute relative error bound of the true parameter. If both sets of outputs are representative of the true parameter, we will assume that the methods are comparable. 
+We will also compare the time performance of our method with that from `simpleboot`. 
+
+### Mean: `oneMean`
+
+The code below is a reproducible example of bootstrapping means. 
+
+```{r oneMean_use}
+set.seed(4321)
+#random sample from N(5, 2)
+data <- rnorm(100, 5, 2) 
+#summary of bootstrapped statistic
+summary(oneMean(data, 1000))
+```
+
+The code below is used to compare and benchmark our method. 
+
+```{r oneMean_bench}
+## checking if our method gives a 'close' representation 
+bootstrap.check <- function(){
+  set.seed(4321) #reproducibility
+  x <- rnorm(100, 5, 2) #random sample from N(5, 2)
+  abs(mean(oneMean(x, 1000))/5 - 1) < 0.1 #10% error bound
+}
+
+## checking if simpleboot method gives a 'close' representation 
+simpleboot.check <- function(){
+  set.seed(4321) #reproducibility
+  x <- rnorm(100, 5, 2) #random sample from N(5, 2)
+  abs(mean(simpleboot::one.boot(x, mean, 1000)$t)/5 - 1) < 0.1 #10% error bound
+}
+
+paste0("Is the bootstrap output close to the true parameter? ", bootstrap.check())
+
+paste0("Is the simpleboot output close to the true parameter? ", simpleboot.check())
+
+## benchmarking to compare time performance
+bench::mark("bootstrap::oneMean" = bootstrap.check(),
+            "simpleboot::mean" = simpleboot.check())[,c(1:5)]
+```
+`simpleboot` marginally outperforms `bootstrap`. Their respective bootstrap results are close to the true parameter. 
+
+
+### Median: `oneMedian`
+
+The code below is a reproducible example of bootstrapping medians. 
+
+```{r oneMedian_use}
+set.seed(4321)
+#random sample from N(5, 2)
+data <- rnorm(100, 5, 2) 
+#summary of bootstrapped statistic
+summary(oneMedian(data, 1000))
+```
+
+The code below is used to compare and benchmark our method. 
+
+```{r oneMedian_bench}
+## checking if our method gives a 'close' representation 
+bootstrap.check <- function(){
+  set.seed(4321) #reproducibility
+  x <- rnorm(100, 5, 2) #random sample from N(5, 2)
+  abs(mean(oneMedian(x, 1000))/5 - 1) < 0.1 #10% error bound
+}
+
+## checking if simpleboot method gives a 'close' representation 
+simpleboot.check <- function(){
+  set.seed(4321) #reproducibility
+  x <- rnorm(100, 5, 2) #random sample from N(5, 2)
+  abs(mean(simpleboot::one.boot(x, median, 1000)$t)/5 - 1) < 0.1 #10% error bound
+}
+
+paste0("Is the bootstrap output close to the true parameter? ", bootstrap.check())
+
+paste0("Is the simpleboot output close to the true parameter? ", simpleboot.check())
+
+## benchmarking to compare time performance
+bench::mark("bootstrap::oneMedian" = bootstrap.check(),
+            "simpleboot::median" = simpleboot.check())[,c(1:5)]
+```
+`simpleboot` marginally outperforms `bootstrap`. Their respective bootstrap results are close to the true parameter.
+
+### SD: `oneSD`
+
+The code below is a reproducible example of bootstrapping SDs. 
+
+```{r oneSD_use}
+set.seed(4321)
+#random sample from N(5, 2)
+data <- rnorm(100, 5, 2) 
+#summary of bootstrapped statistic
+summary(oneSD(data, 1000))
+```
+
+The code below is used to compare and benchmark our method. 
+
+```{r oneSD_bench}
+## checking if our method gives a 'close' representation 
+bootstrap.check <- function(){
+  set.seed(4321) #reproducibility
+  x <- rnorm(100, 5, 2) #random sample from N(5, 2)
+  abs(mean(oneSD(x, 1000))/2 - 1) < 0.1 #10% error bound
+}
+
+## checking if simpleboot method gives a 'close' representation 
+simpleboot.check <- function(){
+  set.seed(4321) #reproducibility
+  x <- rnorm(100, 5, 2) #random sample from N(5, 2)
+  abs(mean(simpleboot::one.boot(x, sd, 1000)$t)/2 - 1) < 0.1 #10% error bound
+}
+
+paste0("Is the bootstrap output close to the true parameter? ", bootstrap.check())
+
+paste0("Is the simpleboot output close to the true parameter? ", simpleboot.check())
+
+## benchmarking to compare time performance
+bench::mark("bootstrap::oneSD" = bootstrap.check(),
+            "simpleboot::SD" = simpleboot.check())[,c(1:5)]
+```
+
+`bootstrap` marginally outperforms `simpleboot` . Their respective bootstrap results are close to the true parameter.
+
+
+### Variance: `oneVar`
+
+The code below is a reproducible example of bootstrapping variance. 
+
+```{r oneVar_use}
+set.seed(54321)
+#random sample from N(5, 2)
+data <- rnorm(200, 5, 2) 
+#summary of bootstrapped statistic
+summary(oneVar(data, 1000))
+```
+
+The code below is used to compare and benchmark our method. 
+
+```{r oneVar_bench}
+## checking if our method gives a 'close' representation 
+bootstrap.check <- function(){
+  set.seed(54321) #reproducibility
+  x <- rnorm(200, 5, 2) #random sample from N(5, 2)
+  abs(mean(oneVar(x, 1000))/4 - 1) < 0.1 #10% error bound
+}
+
+## checking if simpleboot method gives a 'close' representation 
+simpleboot.check <- function(){
+  set.seed(54321) #reproducibility
+  x <- rnorm(200, 5, 2) #random sample from N(5, 2)
+  abs(mean(simpleboot::one.boot(x, var, 1000)$t)/4 - 1) < 0.1 #10% error bound
+}
+
+paste0("Is the bootstrap output close to the true parameter? ", bootstrap.check())
+
+paste0("Is the simpleboot output close to the true parameter? ", simpleboot.check())
+
+## benchmarking to compare time performance
+bench::mark("bootstrap::oneVar" = bootstrap.check(),
+            "simpleboot::var" = simpleboot.check())[,c(1:5)]
+```
+`bootstrap` marginally outperforms `simpleboot` . Their respective bootstrap results are close to the true parameter.
+
+
+
+
+
+### Quantile: `oneQuantile`
+The code below is a reproducible example of bootstrapping quantile. 
+
+```{r oneQuantile_use}
+set.seed(4321)
+#random sample from N(5, 2)
+data <- rnorm(200, 5, 2) 
+#summary of bootstrapped statistic - 0.3-th quantile
+summary(oneQuantile(data, 0.3, 1000))
+```
+
+The code below is used to compare and benchmark our method. 
+
+```{r oneQuantile_bench}
+## checking if our method gives a 'close' representation 
+bootstrap.check <- function(){
+  set.seed(4321) #reproducibility
+  x <- rnorm(200, 5, 2) #random sample from N(5, 2)
+  true <- qnorm(0.3, 5, 2)
+  abs(mean(oneQuantile(x, 0.3, 1000))/true - 1) < 0.1 #10% error bound
+}
+
+## checking if simpleboot method gives a 'close' representation 
+simpleboot.check <- function(){
+  set.seed(4321) #reproducibility
+  x <- rnorm(200, 5, 2) #random sample from N(5, 2)
+  true <- qnorm(0.3, 5, 2)
+  abs(mean(simpleboot::one.boot(x, quantile, 1000, probs = 0.3)$t)/true - 1) < 0.1 #10% error bound
+}
+
+paste0("Is the bootstrap output close to the true parameter? ", bootstrap.check())
+
+paste0("Is the simpleboot output close to the true parameter? ", simpleboot.check())
+
+## benchmarking to compare time performance
+bench::mark("bootstrap::oneQuantile" = bootstrap.check(),
+            "simpleboot::quantile" = simpleboot.check())[,c(1:5)]
+```
+
+`bootstrap` marginally outperforms `simpleboot` . Their respective bootstrap results are close to the true parameter.
+
+
+### Raw Moment: `oneRawMoment`
+
+The code below is a reproducible example of bootstrapping raw moments. 
+
+```{r oneRawMoment_use}
+set.seed(4321)
+#random sample from N(5, 2)
+data <- rnorm(200, 5, 2) 
+#summary of bootstrapped statistic - 3rd raw moment
+summary(oneRawMoment(data, 3, 1000))
+```
+
+The code below is used to compare and benchmark our method. 
+
+```{r oneRawMoment_bench}
+## checking if our method gives a 'close' representation 
+bootstrap.check <- function(){
+  set.seed(4321) #reproducibility
+  x <- rnorm(200, 5, 2) #random sample from N(5, 2)
+  true <- integrate(function(x) x*x*x*dnorm(x, 5, 2), -Inf, Inf)$value
+  abs(mean(oneRawMoment(x, 3, 1000))/true - 1) < 0.1 #10% error bound
+}
+
+## checking if simpleboot method gives a 'close' representation 
+simpleboot.check <- function(){
+  set.seed(4321) #reproducibility
+  x <- rnorm(200, 5, 2) #random sample from N(5, 2)
+  true <- integrate(function(x) x*x*x*dnorm(x, 5, 2), -Inf, Inf)$value
+  raw.moment <- function(x, order){x^order}
+  abs(mean(simpleboot::one.boot(x, raw.moment, 1000, order = 3)$t)/true - 1) < 0.1 #10% error bound
+}
+
+paste0("Is the bootstrap output close to the true parameter? ", bootstrap.check())
+
+paste0("Is the simpleboot output close to the true parameter? ", simpleboot.check())
+
+## benchmarking to compare time performance
+bench::mark("bootstrap::oneRawMoment" = bootstrap.check(),
+            "simpleboot::rawMoment" = simpleboot.check())[,c(1:5)]
+```
+
+`bootstrap` marginally outperforms `simpleboot` . Their respective bootstrap results are close to the true parameter.
+
+
+### Central Moment: `oneCentralMoment`
+
+The code below is a reproducible example of bootstrapping central moments. 
+
+```{r oneCentralMoment_use}
+set.seed(12345)
+#random sample from N(5, 2)
+data <- rnorm(200, 5, 2) 
+#summary of bootstrapped statistic - 4th central moment
+summary(oneCentralMoment(data, 4, 1000))
+```
+
+The code below is used to compare and benchmark our method. 
+
+```{r oneCentralMoment_bench}
+## checking if our method gives a 'close' representation 
+bootstrap.check <- function(){
+  set.seed(12345) #reproducibility
+  x <- rnorm(200, 5, 2) #random sample from N(5, 2)
+  true <- integrate(function(x) ((x-5)^4)*dnorm(x, 5, 2), -Inf, Inf)$value
+  abs(mean(oneCentralMoment(x, 4, 1000))/true - 1) < 0.1 #10% error bound
+}
+
+## checking if simpleboot method gives a 'close' representation 
+simpleboot.check <- function(){
+  set.seed(12345) #reproducibility
+  x <- rnorm(200, 5, 2) #random sample from N(5, 2)
+  true <- integrate(function(x) ((x-5)^4)*dnorm(x, 5, 2), -Inf, Inf)$value
+  cent.moment <- function(x, order){(x - mean(x))^order}
+  abs(mean(simpleboot::one.boot(x, cent.moment, 1000, order = 4)$t)/true - 1) < 0.1 #10% error bound
+}
+
+paste0("Is the bootstrap output close to the true parameter? ", bootstrap.check())
+
+paste0("Is the simpleboot output close to the true parameter? ", simpleboot.check())
+
+## benchmarking to compare time performance
+bench::mark("bootstrap::oneCentralMoment" = bootstrap.check(),
+            "simpleboot::centralMoment" = simpleboot.check())[,c(1:5)]
+```
+
+`bootstrap` marginally outperforms `simpleboot` . Their respective bootstrap results are close to the true parameter.
+
+
+
+
+
+
+
+
+### Cofficient of variation: `oneCV`
+
+The code below is a reproducible example of bootstrapping coefficient of variation. 
+
+```{r oneCV_use}
+set.seed(4321)
+#random sample from N(5, 2)
+data <- rnorm(200, 5, 2) 
+#summary of bootstrapped statistic - 3rd raw moment
+summary(oneCV(data, 1000))
+```
+
+The code below is used to compare and benchmark our method. 
+
+```{r oneCV_bench}
+## checking if our method gives a 'close' representation 
+bootstrap.check <- function(){
+  set.seed(4321) #reproducibility
+  x <- rnorm(200, 5, 2) #random sample from N(5, 2)
+  true <- 2/5
+  abs(mean(oneCV(x, 1000))/true - 1) < 0.1 #10% error bound
+}
+
+## checking if simpleboot method gives a 'close' representation 
+simpleboot.check <- function(){
+  set.seed(4321) #reproducibility
+  x <- rnorm(200, 5, 2) #random sample from N(5, 2)
+  true <- 2/5
+  cv <- function(x){sd(x)/mean(x)}
+  abs(mean(simpleboot::one.boot(x, cv, 1000)$t)/true - 1) < 0.1 #10% error bound
+}
+
+paste0("Is the bootstrap output close to the true parameter? ", bootstrap.check())
+
+paste0("Is the simpleboot output close to the true parameter? ", simpleboot.check())
+
+## benchmarking to compare time performance
+bench::mark("bootstrap::oneCV" = bootstrap.check(),
+            "simpleboot::cv" = simpleboot.check())[,c(1:5)]
+```
+
+`simpleboot` marginally outperforms `bootstrap`. Their respective bootstrap results are close to the true parameter.
+
+
+
+
+### Inter quartile range: `oneIQR`
+
+The code below is a reproducible example of bootstrapping interquartile range. 
+
+```{r oneIQR_use}
+set.seed(4321)
+#random sample from N(5, 2)
+data <- rnorm(200, 5, 2) 
+#summary of bootstrapped statistic - 3rd raw moment
+summary(oneIQR(data, 1000))
+```
+
+The code below is used to compare and benchmark our method. 
+
+```{r oneIQR_bench}
+## checking if our method gives a 'close' representation 
+bootstrap.check <- function(){
+  set.seed(4321) #reproducibility
+  x <- rnorm(200, 5, 2) #random sample from N(5, 2)
+  true <- qnorm(0.75, 5, 2) - qnorm(0.25, 5, 2)
+  abs(mean(oneIQR(x, 1000))/true - 1) < 0.1 #10% error bound
+}
+
+## checking if simpleboot method gives a 'close' representation 
+simpleboot.check <- function(){
+  set.seed(4321) #reproducibility
+  x <- rnorm(200, 5, 2) #random sample from N(5, 2)
+  true <- qnorm(0.75, 5, 2) - qnorm(0.25, 5, 2)
+  iqr <- function(x){diff(as.numeric(quantile(x, probs = c(0.25, 0.75))))}
+  abs(mean(simpleboot::one.boot(x, iqr, 1000)$t)/true - 1) < 0.1 #10% error bound
+}
+
+paste0("Is the bootstrap output close to the true parameter? ", bootstrap.check())
+
+paste0("Is the simpleboot output close to the true parameter? ", simpleboot.check())
+
+## benchmarking to compare time performance
+bench::mark("bootstrap::oneIQR" = bootstrap.check(),
+            "simpleboot::iqr" = simpleboot.check())[,c(1:5)]
+```
+
+`simpleboot` marginally outperforms `bootstrap`. Their respective bootstrap results are close to the true parameter.
+
+
+
+
+## Double sample bootstrap routines
+
+We will generate a random sample from $N(5, 2)$, another sample from $N(3, 1)$ and obtain 1000 bootstrapped statistics from the same and study their behaviour. 
+
+```{R double}
+set.seed(1234)
+x <- rnorm(100, 5, 2)
+y <- rnorm(100, 3, 1)
+```
+
+Given the randomness of resampling procedures, instead of checking for exact equality, we will examine if the bootstrapped mean is close to the true parameter value. Further, we will examine if the output from `simpleboot` is close to the true parameter value as well. By 'close', we imply that the mean of the bootstrapped statistic is within a $10\%$ absolute relative error bound of the true parameter. If both sets of outputs are representative of the true parameter, we will assume that the methods are comparable. 
+We will also compare the time performance of our method with that from `simpleboot`. 
+
+### Difference in means: `twoMeanDiff`
+
+
+The code below is a reproducible example of bootstrapping means. 
+
+```{r twoMeanDiff_use}
+set.seed(12345)
+#random sample from N(5, 2)
+x <- rnorm(100, 5, 1)
+y <- rnorm(100, 1, 1)
+#summary of bootstrapped statistic
+summary(twoMeanDiff(x, y, 1000))
+```
+
+The code below is used to compare and benchmark our method. 
+
+```{r twoMeanDiff_bench}
+## checking if our method gives a 'close' representation 
+bootstrap.check <- function(){
+  set.seed(1234) #reproducibility
+  x <- rnorm(100, 5, 1) 
+  y <- rnorm(100, 1, 1)
+  abs(mean(twoMeanDiff(x, y, 1000))/4 - 1) < 0.1 #10% error bound
+}
+
+## checking if simpleboot method gives a 'close' representation 
+simpleboot.check <- function(){
+  set.seed(1234) #reproducibility
+  x <- rnorm(100, 5, 1) #random sample from N(5, 2)
+  y <- rnorm(100, 1, 1)
+  abs(mean(simpleboot::two.boot(x, y, mean, 1000)$t)/4 - 1) < 0.1 #10% error bound
+}
+
+paste0("Is the bootstrap output close to the true parameter? ", bootstrap.check())
+
+paste0("Is the simpleboot output close to the true parameter? ", simpleboot.check())
+
+## benchmarking to compare time performance
+bench::mark("bootstrap::twoMeanDiff" = bootstrap.check(),
+            "simpleboot::meanDiff" = simpleboot.check())[,c(1:5)]
+```
+`bootstrap` and `simpleboot` have comparable performance. Their respective bootstrap results are close to the true parameter. 
+
+
+### Difference in quantiles: `twoQuantileDiff`
+
+
+The code below is a reproducible example of bootstrapping 0.3-th quantile differences. 
+
+```{r twoQuantileDiff_use}
+set.seed(12345)
+#random sample from N(5, 2)
+x <- rnorm(100, 5, 1)
+y <- rnorm(100, 1, 1)
+#summary of bootstrapped statistic - difference of 0.3-th quantiles
+summary(twoQuantileDiff(x, y, 0.3, 1000))
+```
+
+The code below is used to compare and benchmark our method. 
+
+```{r twoQuantileDiff_bench}
+## checking if our method gives a 'close' representation 
+bootstrap.check <- function(){
+  set.seed(1234) #reproducibility
+  x <- rnorm(100, 5, 1) 
+  y <- rnorm(100, 1, 1)
+  abs(mean(twoQuantileDiff(x, y, 0.3, 1000))/4 - 1) < 0.1 #10% error bound
+}
+
+## checking if simpleboot method gives a 'close' representation 
+simpleboot.check <- function(){
+  set.seed(1234) #reproducibility
+  x <- rnorm(100, 5, 1) #random sample from N(5, 2)
+  y <- rnorm(100, 1, 1)
+  abs(mean(simpleboot::two.boot(x, y, quantile, probs = 0.3,  1000)$t)/4 - 1) < 0.1 #10% error bound
+}
+
+paste0("Is the bootstrap output close to the true parameter? ", bootstrap.check())
+
+paste0("Is the simpleboot output close to the true parameter? ", simpleboot.check())
+
+## benchmarking to compare time performance
+bench::mark("bootstrap::twoQuantileDiff" = bootstrap.check(),
+            "simpleboot::quantileDiff" = simpleboot.check())[,c(1:5)]
+```
+`simpleboot`outperforms `bootstrap`. Their respective bootstrap results are close to the true parameter. 
+
+
+
+
+
+### Ratio of variances: `twoVarRatio`
+
+
+The code below is a reproducible example of bootstrapping ratio of variances. 
+
+```{r twoVarRatio_use}
+set.seed(4321)
+#random sample from N(5, 2)
+x <- rnorm(100, 0, 4)
+y <- rnorm(100, 0, 1)
+#summary of bootstrapped statistic - difference of 0.3-th quantiles
+summary(twoVarRatio(x, y,  1000))
+```
+
+`simpleboot` does not have any function to compare against, so we cannot compare.
+
+
+### Correlation coefficient: `twoCor`
+
+The code below is a reproducible example of bootstrapping Pearson's correlation. 
+
+```{r twoCor_use}
+set.seed(12345)
+x <- rnorm(100, 5, 1)
+y <- 0.5*x + rnorm(100, 0, 0.2)
+#summary of bootstrapped statistic - Pearson's correlation
+summary(twoCor(x, y, 1000))
+```
+
+The code below is used to compare and benchmark our method. 
+
+```{r twoCor_bench}
+## checking if our method gives a 'close' representation 
+bootstrap.check <- function(){
+set.seed(12345)
+x <- rnorm(100, 5, 1)
+y <- 0.5*x + rnorm(100, 0, 0.2)
+true <- cor(x, y)
+  abs(mean(twoCor(x, y, 1000))/true - 1) < 0.1 #10% error bound
+}
+
+## checking if simpleboot method gives a 'close' representation 
+simpleboot.check <- function(){
+  set.seed(1234) #reproducibility
+  x <- rnorm(100, 5, 1) #random sample from N(5, 2)
+  y <- rnorm(100, 1, 1)
+  true <- cor(x, y)
+  abs(mean(simpleboot::pairs_boot(x, y, cor,  1000)$t)/true - 1) < 0.1 #10% error bound
+}
+
+paste0("Is the bootstrap output close to the true parameter? ", bootstrap.check())
+
+paste0("Is the simpleboot output close to the true parameter? ", simpleboot.check())
+
+## benchmarking to compare time performance
+bench::mark("bootstrap::twoCor" = bootstrap.check(),
+            "simpleboot::cor" = simpleboot.check())[,c(1:5)]
+```
+`simpleboot` and `bootstrap` have comparable performance. Their respective bootstrap results are close to the true parameter. 
+
+
+
+
+## Linear model bootstrapping: `lmBoot`
+
+The code below is a reproducible example of bootstrapping regression coefficients. We can either resample rows or residuals. Here, we do the former.
+
+```{r lmBoot_use}
+## resampling rows
+suppressMessages(data(airquality))
+suppressMessages(attach(airquality))
+set.seed(30)
+lmodel <- lm(Ozone ~ Wind)
+lboot <- lmBoot(lmodel, B = 1000)
+
+#true model output
+coef(lmodel)
+
+#mean of bootstrapped coefficients
+op = apply(lboot, 2, mean)
+names(op) = c("(Intercept)", "Wind")
+op
+```
+
+The code below is used to compare and benchmark our method. 
+
+```{r lmBoot_bench}
+## checking if our method gives a 'close' representation 
+bootstrap.check <- function(){
+set.seed(30)
+lmodel <- lm(Ozone ~ Wind)
+lboot <- lmBoot(lmodel, B = 1000)
+#true model output
+true <- coef(lmodel)
+#mean of bootstrapped coefficients
+bs = apply(lboot, 2, mean)
+abs(mean(bs/true - 1)) < 0.1 #10% error bound
+}
+
+## checking if simpleboot method gives a 'close' representation 
+simpleboot.check <- function(){
+set.seed(30)
+lmodel <- lm(Ozone ~ Wind)
+true <- coef(lmodel)
+bs.op <- (simpleboot::lm.boot(lmodel, R = 1000))
+bs <- NULL
+for(i in 1:1000){
+  bs <- cbind(bs, as.numeric(unlist(bs.op$boot.list[i])[1:2]))
+}
+bs <- apply(t(bs), 2, mean)
+abs(mean(bs/true - 1)) < 0.1  #10% error bound
+}
+
+paste0("Is the bootstrap output close to the true parameter? ", bootstrap.check())
+
+paste0("Is the simpleboot output close to the true parameter? ", simpleboot.check())
+
+## benchmarking to compare time performance
+bench::mark("bootstrap::lmBoot" = bootstrap.check(),
+            "simpleboot::lm.boot" = simpleboot.check())[,c(1:5)]
+```
+`bootstrap` outperforms `simpleboot`. Their respective bootstrap results are close to the true parameter. 
+
+# Final Notes
+
+Thanks for taking your time to look at our package. In case you want to let us know about any comments, queries or suggestions, contact us [here](mailto:soumikp@umich.edu)!
+
+
