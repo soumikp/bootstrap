@@ -1,7 +1,7 @@
 # bootstrap
 
 <!-- badges: start -->
-[![Build Status](https://travis-ci.com/soumikp/bootstrap.svg?branch=main)](https://travis-ci.com/soumikp/bootstrap)
+#[![Build Status](https://travis-ci.com/soumikp/bootstrap.svg?branch=main)](https://travis-ci.com/soumikp/bootstrap)
 [![Coveralls test coverage](https://coveralls.io/repos/github/soumikp/bootstrap/badge.svg)](https://coveralls.io/r/soumikp/bootstrap?branch=master)
 <!-- badges: end -->
 
